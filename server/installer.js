@@ -669,7 +669,8 @@ export const runInstaller = async (adminUser, adminPass) => {
     try {
         const settingsToSeed = [
             { key: 'ai_qa_enabled', value: 'false' },
-            { key: 'ai_qa_daily_limit', value: '10' }
+            { key: 'ai_qa_daily_limit', value: '10' },
+            { key: 'ai_qa_use_all_content', value: 'false' }
         ];
 
         for (const setting of settingsToSeed) {

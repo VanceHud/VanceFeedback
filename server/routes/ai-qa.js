@@ -126,40 +126,46 @@ router.post('/ask', authenticateToken, requireAIQAEnabled, checkAIBan, async (re
         }
 
         // Search for related articles in knowledge base
-        // 1. Try exact match first
         // const db = getDB(); // Already declared
         let articles = [];
         const cleanQuestion = question.trim();
 
-        // Strategy 1: Search by keywords (split by space)
-        // If query has no spaces (e.g. continuous Chinese), we might just use the whole string or simple char blocks?
-        // For now, let's try a simple approach: if user inputs a sentence, we try to match segments?
-        // Actually, basic SQL LIKE is poor for natural language.
-        // Let's at least support space-separated keywords.
-        const keywords = cleanQuestion.split(/\s+/).filter(k => k.length > 0);
+        // Check if "Use All Content" is enabled
+        const useAllContent = await getSetting('ai_qa_use_all_content');
 
-        if (keywords.length > 0) {
-            // Build dynamic query
-            const conditions = [];
-            const params = [];
-
-            keywords.forEach(kw => {
-                conditions.push('(title LIKE ? OR content LIKE ?)');
-                params.push(`%${kw}%`, `%${kw}%`);
-            });
-
-            // Allow matching ANY keyword, but we could prioritize?
-            // SQLite/MySQL standard LIKE doesn't score relevance easily.
-            // Let's just grab top 5 matching ANY
-            const sql = `SELECT title, content FROM kb_articles 
-                         WHERE is_published = 1 AND (${conditions.join(' OR ')})
-                         LIMIT 5`;
-
-            const [rows] = await db.query(sql, params);
+        if (useAllContent === true || useAllContent === 'true') {
+            const [rows] = await db.query(
+                `SELECT title, content FROM kb_articles 
+                 WHERE is_published = 1 
+                 ORDER BY id DESC 
+                 LIMIT 100`
+            );
             articles = rows;
-        }
+            console.log(`[AI-QA] Mode: ALL CONTENT. Question: "${cleanQuestion}", Articles fetched: ${articles.length}`);
+        } else {
+            // Strategy 1: Search by keywords (split by space)
+            const keywords = cleanQuestion.split(/\s+/).filter(k => k.length > 0);
 
-        console.log(`[AI-QA] Question: "${cleanQuestion}", Keywords: [${keywords.join(', ')}], Articles found: ${articles.length}`);
+            if (keywords.length > 0) {
+                // Build dynamic query
+                const conditions = [];
+                const params = [];
+
+                keywords.forEach(kw => {
+                    conditions.push('(title LIKE ? OR content LIKE ?)');
+                    params.push(`%${kw}%`, `%${kw}%`);
+                });
+
+                // Allow matching ANY keyword, but we could prioritize?
+                const sql = `SELECT title, content FROM kb_articles 
+                             WHERE is_published = 1 AND (${conditions.join(' OR ')})
+                             LIMIT 5`;
+
+                const [rows] = await db.query(sql, params);
+                articles = rows;
+            }
+            console.log(`[AI-QA] Mode: KEYWORD SEARCH. Question: "${cleanQuestion}", Keywords: [${keywords.join(', ')}], Articles found: ${articles.length}`);
+        }
 
         // Generate answer
         const answer = await answerKnowledgeBaseQuestion(question, articles);

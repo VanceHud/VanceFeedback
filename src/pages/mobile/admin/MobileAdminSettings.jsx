@@ -159,18 +159,36 @@ export default function MobileAdminSettings() {
                     </div>
 
                     {(settings.ai_qa_enabled === true || settings.ai_qa_enabled === 'true') && (
-                        <div>
-                            <label className="block text-sm font-medium text-slate-700 mb-1">每日次数限制</label>
-                            <input
-                                type="number"
-                                min="1"
-                                max="100"
-                                value={settings.ai_qa_daily_limit || 10}
-                                onChange={e => handleChange('ai_qa_daily_limit', parseInt(e.target.value) || 10)}
-                                className="mobile-input"
-                                placeholder="10"
-                            />
-                            <p className="text-xs text-slate-500 mt-1">每个用户每天可使用 AI 问答的次数</p>
+                        <div className="space-y-3 pt-1">
+                            <div>
+                                <label className="block text-sm font-medium text-slate-700 mb-1">每日次数限制</label>
+                                <input
+                                    type="number"
+                                    min="1"
+                                    max="100"
+                                    value={settings.ai_qa_daily_limit || 10}
+                                    onChange={e => handleChange('ai_qa_daily_limit', parseInt(e.target.value) || 10)}
+                                    className="mobile-input"
+                                    placeholder="10"
+                                />
+                                <p className="text-xs text-slate-500 mt-1">每个用户每天可使用 AI 问答的次数</p>
+                            </div>
+
+                            <div className="flex items-center justify-between p-3 bg-white rounded-xl border border-slate-200">
+                                <div>
+                                    <span className="text-sm font-medium text-slate-700">投喂全部内容</span>
+                                    <p className="text-xs text-slate-500">发送所有知识库文章给AI</p>
+                                </div>
+                                <label className="relative inline-flex items-center cursor-pointer">
+                                    <input
+                                        type="checkbox"
+                                        checked={settings.ai_qa_use_all_content === true || settings.ai_qa_use_all_content === 'true'}
+                                        onChange={e => handleChange('ai_qa_use_all_content', e.target.checked)}
+                                        className="sr-only peer"
+                                    />
+                                    <div className="w-11 h-6 bg-slate-200 peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-purple-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-purple-500"></div>
+                                </label>
+                            </div>
                         </div>
                     )}
                 </section>

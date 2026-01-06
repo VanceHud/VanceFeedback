@@ -114,6 +114,7 @@ router.put('/', authenticateToken, requireSuperAdmin, async (req, res) => {
             'ai_summary_enabled',
             'ai_qa_enabled',
             'ai_qa_daily_limit',
+            'ai_qa_use_all_content',
             'show_github_link'
         ];
 
