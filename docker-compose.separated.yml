@@ -1,0 +1,53 @@
+version: '3.8'
+
+services:
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile.backend
+    container_name: vancefeedback-backend
+    ports:
+      - "3030:3030"
+    environment:
+      # Backend Port
+      - PORT=3030
+      # Database Configuration
+      # Uncomment and configure based on your database type
+      # For SQLite (default), no configuration needed - will use server/data/feedback.db
+
+      # For MySQL:
+      # - DB_TYPE=mysql
+      # - DB_HOST=host.docker.internal  # Use 'host.docker.internal' to access host MySQL on Windows/Mac
+      # - DB_PORT=3306
+      # - DB_USER=your_db_user
+      # - DB_PASS=your_db_password
+      # - DB_NAME=vancefeedback
+
+      # Auto-Installer Configuration (Only runs on fresh start)
+      # - ADMIN_USER=admin
+      # - ADMIN_PASS=your_secure_password
+    volumes:
+      # Persist SQLite data (if using SQLite)
+      - ./server/data:/app/server/data
+      # Persist Configuration (db_config.json)
+      - ./server/config:/app/server/config
+    restart: unless-stopped
+    networks:
+      - vancefeedback-network
+
+  frontend:
+    build:
+      context: .
+      dockerfile: Dockerfile.frontend
+    container_name: vancefeedback-frontend
+    ports:
+      - "3020:3020"
+    depends_on:
+      - backend
+    restart: unless-stopped
+    networks:
+      - vancefeedback-network
+
+networks:
+  vancefeedback-network:
+    driver: bridge

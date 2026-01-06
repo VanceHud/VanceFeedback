@@ -1,0 +1,26 @@
+# Backend Dockerfile for VanceFeedback
+# This builds only the backend server without frontend assets
+
+FROM node:20-alpine
+
+WORKDIR /app
+
+# Copy package files
+COPY package*.json ./
+
+# Install only production dependencies
+# This excludes devDependencies like vite, tailwindcss, etc.
+RUN npm install --omit=dev
+
+# Copy backend source code
+COPY server/ ./server/
+
+# Create necessary directories
+RUN mkdir -p server/data && mkdir -p server/config
+
+# Expose backend port (configurable via PORT env var)
+EXPOSE 3030
+
+# Start backend server
+# The PORT environment variable can be set to customize the port
+CMD ["node", "--security-revert=CVE-2023-46809", "server/index.js"]

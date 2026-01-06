@@ -1,0 +1,33 @@
+version: '3.8'
+
+services:
+  app:
+    build: .
+    ports:
+      - "3000:3000"
+    restart: always
+    # Uncomment and set these variables to auto-configure the system.
+    # If left commented, the system will start in "Setup Mode", accessible via the web UI.
+    # environment:
+    # Database Configuration (External MySQL example)
+    # - DB_TYPE=mysql
+    # - DB_HOST=host.docker.internal  # Use 'host.docker.internal' to access host MySQL on Windows/Mac
+    # - DB_PORT=3306
+    # - DB_USER=your_db_user
+    # - DB_PASS=your_db_password
+    # - DB_NAME=qli_feedback
+
+    # Auto-Installer Configuration (Only runs on fresh start if DB vars are set)
+    # - ADMIN_USER=admin
+    # - ADMIN_PASS=your_secure_password
+    volumes:
+      # Persist SQLite data if using SQLite
+      - ./server/data:/app/server/data
+      # Persist Configuration (db_config.json)
+      - ./server/config:/app/server/config
+    networks:
+      - 1panel-network
+
+networks:
+  1panel-network:
+    external: true
