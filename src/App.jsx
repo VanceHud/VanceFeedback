@@ -45,7 +45,10 @@ import AdminSettings from './pages/admin/AdminSettings';
 import AdminQuestionTypes from './pages/admin/AdminQuestionTypes';
 import AdminEmailTemplates from './pages/admin/AdminEmailTemplates';
 import AdminAnnouncements from './pages/admin/AdminAnnouncements';
+import AdminKnowledgeBase from './pages/admin/AdminKnowledgeBase';
 import HumanVerification from './pages/HumanVerification';
+import KnowledgeBase from './pages/KnowledgeBase';
+import KnowledgeBaseArticle from './pages/KnowledgeBaseArticle';
 
 function AppGuard({ children }) {
     const [status, setStatus] = useState('loading'); // loading, configured, setup
@@ -226,6 +229,8 @@ export default function App() {
                                 <Route path="/login" element={<Login />} />
                                 <Route path="/dashboard/*" element={<Dashboard />} />
                                 <Route path="/user-center" element={<UserCenter />} />
+                                <Route path="/knowledge-base" element={<KnowledgeBase />} />
+                                <Route path="/knowledge-base/:slug" element={<KnowledgeBaseArticle />} />
                                 {/* Mobile Routes */}
                                 <Route path="/m" element={<MobileLayout />}>
                                     <Route index element={<MobileHome />} />
@@ -249,6 +254,7 @@ export default function App() {
                                     <Route path="question-types" element={<AdminQuestionTypes />} />
                                     <Route path="email-templates" element={<AdminEmailTemplates />} />
                                     <Route path="announcements" element={<AdminAnnouncements />} />
+                                    <Route path="knowledge-base" element={<AdminKnowledgeBase />} />
                                 </Route>
                                 {/* Mobile Admin Routes */}
                                 <Route path="/m/admin" element={<MobileAdminLayout />}>

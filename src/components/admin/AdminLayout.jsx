@@ -3,7 +3,7 @@ import { NavLink, Outlet, useNavigate } from 'react-router-dom';
 import {
     MessageSquare, Eye, BarChart2, Users, Mail, FileText,
     Settings, Tag, Bell, ChevronLeft, ChevronRight, LogOut,
-    Crown, Shield, Home, Menu, X
+    Crown, Shield, Home, Menu, X, Book
 } from 'lucide-react';
 
 export default function AdminLayout() {
@@ -86,6 +86,12 @@ export default function AdminLayout() {
             icon: Bell,
             label: '公告管理',
             roles: ['super_admin']
+        },
+        {
+            path: '/admin/knowledge-base',
+            icon: Book,
+            label: '知识库',
+            roles: ['admin', 'super_admin']
         }
     ];
 

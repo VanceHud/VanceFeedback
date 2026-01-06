@@ -581,6 +581,66 @@ export const runInstaller = async (adminUser, adminPass) => {
     `;
     await db.query(aiCacheTableSQL);
 
+    // 14. Create Knowledge Base Categories Table
+    const kbCategoriesTableSQL = isSQLite ? `
+        CREATE TABLE IF NOT EXISTS kb_categories (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            name TEXT NOT NULL,
+            slug TEXT UNIQUE NOT NULL,
+            description TEXT,
+            icon TEXT DEFAULT '📁',
+            sort_order INTEGER DEFAULT 0,
+            is_active INTEGER DEFAULT 1,
+            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+        )
+    ` : `
+        CREATE TABLE IF NOT EXISTS kb_categories (
+            id INT AUTO_INCREMENT PRIMARY KEY,
+            name VARCHAR(100) NOT NULL,
+            slug VARCHAR(100) UNIQUE NOT NULL,
+            description VARCHAR(500),
+            icon VARCHAR(10) DEFAULT '📁',
+            sort_order INT DEFAULT 0,
+            is_active TINYINT(1) DEFAULT 1,
+            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+        )
+    `;
+    await db.query(kbCategoriesTableSQL);
+
+    // 15. Create Knowledge Base Articles Table
+    const kbArticlesTableSQL = isSQLite ? `
+        CREATE TABLE IF NOT EXISTS kb_articles (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            category_id INTEGER,
+            title TEXT NOT NULL,
+            slug TEXT UNIQUE NOT NULL,
+            content TEXT NOT NULL,
+            views INTEGER DEFAULT 0,
+            is_published INTEGER DEFAULT 0,
+            created_by INTEGER,
+            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+            updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+            FOREIGN KEY (category_id) REFERENCES kb_categories(id) ON DELETE SET NULL,
+            FOREIGN KEY (created_by) REFERENCES users(id) ON DELETE SET NULL
+        )
+    ` : `
+        CREATE TABLE IF NOT EXISTS kb_articles (
+            id INT AUTO_INCREMENT PRIMARY KEY,
+            category_id INT,
+            title VARCHAR(200) NOT NULL,
+            slug VARCHAR(200) UNIQUE NOT NULL,
+            content LONGTEXT NOT NULL,
+            views INT DEFAULT 0,
+            is_published TINYINT(1) DEFAULT 0,
+            created_by INT,
+            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+            updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+            FOREIGN KEY (category_id) REFERENCES kb_categories(id) ON DELETE SET NULL,
+            FOREIGN KEY (created_by) REFERENCES users(id) ON DELETE SET NULL
+        )
+    `;
+    await db.query(kbArticlesTableSQL);
+
     // 7. Create Super Admin (Only if credentials are provided)
     if (adminUser && adminPass) {
         const hashedPassword = await bcrypt.hash(adminPass, 10);

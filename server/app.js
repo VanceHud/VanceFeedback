@@ -18,6 +18,7 @@ import adminNotificationsRoutes from './routes/admin-notifications.js';
 import questionTypesRoutes from './routes/question-types.js';
 import emailTemplatesRoutes from './routes/email-templates.js';
 import announcementsRoutes from './routes/announcements.js';
+import knowledgeBaseRoutes from './routes/knowledge-base.js';
 import { runInstaller } from './installer.js';
 import { initAI } from './services/ai.js';
 
@@ -138,6 +139,7 @@ app.use('/api/question-types', requireConfig, questionTypesRoutes);
 app.use('/api/email-templates', requireConfig, emailTemplatesRoutes);
 app.use('/api/announcements', requireConfig, announcementsRoutes);
 app.use('/api/captcha', requireConfig, captchaRoutes);
+app.use('/api/knowledge-base', requireConfig, knowledgeBaseRoutes);
 
 // SPA Fallback - Serve index.html for any non-API routes
 // This allows the React Router to handle client-side routing
