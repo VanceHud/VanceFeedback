@@ -1,33 +1,39 @@
 version: '3.8'
 
 services:
-  app:
+  vance-feedback:
     build: .
     ports:
-      - "3000:3000"
+      - "${PORT:-3000}:3000"
     restart: always
-    # Uncomment and set these variables to auto-configure the system.
-    # If left commented, the system will start in "Setup Mode", accessible via the web UI.
-    # environment:
-    # Database Configuration (External MySQL example)
-    # - DB_TYPE=mysql
-    # - DB_HOST=host.docker.internal  # Use 'host.docker.internal' to access host MySQL on Windows/Mac
-    # - DB_PORT=3306
-    # - DB_USER=your_db_user
-    # - DB_PASS=your_db_password
-    # - DB_NAME=qli_feedback
+    environment:
+      # Application Configuration
+      - PORT=3000
+      - JWT_SECRET=${JWT_SECRET}
 
-    # Auto-Installer Configuration (Only runs on fresh start if DB vars are set)
-    # - ADMIN_USER=admin
-    # - ADMIN_PASS=your_secure_password
+      # Database Configuration
+      # Default: SQLite (no extra config needed, uses /app/server/data/feedback.db)
+
+      # Optional: MySQL Configuration (Uncomment to use)
+      # - DB_TYPE=mysql
+      # - DB_HOST=host.docker.internal
+      # - DB_PORT=3306
+      # - DB_USER=root
+      # - DB_PASS=password
+      # - DB_NAME=vancefeedback
+
+      # Auto-Installer Configuration (Runs on first start if DB is empty)
+      - ADMIN_USER=${ADMIN_USER:-admin}
+      - ADMIN_PASS=${ADMIN_PASS:-admin123}
+
     volumes:
-      # Persist SQLite data if using SQLite
+      # Persist SQLite data
       - ./server/data:/app/server/data
-      # Persist Configuration (db_config.json)
+      # Persist Configuration
       - ./server/config:/app/server/config
     networks:
-      - 1panel-network
+      - vance-network
 
 networks:
-  1panel-network:
-    external: true
+  vance-network:
+    driver: bridge
