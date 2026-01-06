@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { NavLink, Outlet, useNavigate, useLocation } from 'react-router-dom';
 import { Home, Book, MessageSquarePlus, User } from 'lucide-react';
-import api from '../../api';
+import api from '../api';
 
 const ALL_NAV_ITEMS = [
     { path: '/m', label: '首页', icon: Home, exact: true },

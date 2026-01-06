@@ -1,8 +1,7 @@
 import express from 'express';
 import { getDB } from '../db.js';
 import { authenticateToken } from '../middleware/auth.js';
-import { getDB } from '../db.js';
-import { authenticateToken } from '../middleware/auth.js';
+
 import { getSetting } from '../services/email.js';
 import { createAuditLog } from './audit.js';
 
