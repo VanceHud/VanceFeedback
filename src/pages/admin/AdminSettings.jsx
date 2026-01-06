@@ -3,7 +3,7 @@ import api from '../../api';
 import {
     Settings, Save, RefreshCcw, CheckCircle, AlertCircle, Shield, Mail,
     AtSign, Sparkles, Bell, Monitor, Plus, Minus, Key, FileText, Send,
-    ToggleLeft, ToggleRight
+    ToggleLeft, ToggleRight, Book
 } from 'lucide-react';
 import Loading from '../../components/Loading';
 
@@ -434,7 +434,61 @@ export default function AdminSettings() {
                                                 <div className="w-9 h-5 bg-slate-200 peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-purple-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-purple-600"></div>
                                             </div>
                                         </label>
+
+                                        <label className="flex items-center justify-between cursor-pointer group hover:bg-white p-2 rounded-lg transition-colors">
+                                            <div className="flex flex-col">
+                                                <span className="text-sm font-medium text-slate-700">AI 知识库问答</span>
+                                                <span className="text-xs text-slate-400">用户可在知识库页面进行智能问答</span>
+                                            </div>
+                                            <div className="relative inline-flex items-center">
+                                                <input
+                                                    type="checkbox"
+                                                    checked={settings.ai_qa_enabled === true || settings.ai_qa_enabled === 'true'}
+                                                    onChange={(e) => updateSetting('ai_qa_enabled', e.target.checked)}
+                                                    className="sr-only peer"
+                                                />
+                                                <div className="w-9 h-5 bg-slate-200 peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-purple-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-purple-600"></div>
+                                            </div>
+                                        </label>
                                     </div>
+
+                                    {/* AI Q&A Daily Limit */}
+                                    {(settings.ai_qa_enabled === true || settings.ai_qa_enabled === 'true') && (
+                                        <div className="space-y-3">
+                                            <div className="p-3 bg-white border border-slate-200 rounded-lg">
+                                                <label className="flex items-center justify-between">
+                                                    <div className="flex flex-col">
+                                                        <span className="text-sm font-medium text-slate-700">每日问答次数限制</span>
+                                                        <span className="text-xs text-slate-400">每个用户每天可使用AI问答的次数</span>
+                                                    </div>
+                                                    <input
+                                                        type="number"
+                                                        min="1"
+                                                        max="100"
+                                                        value={settings.ai_qa_daily_limit || 10}
+                                                        onChange={(e) => updateSetting('ai_qa_daily_limit', parseInt(e.target.value) || 10)}
+                                                        className="w-20 border-2 border-slate-200 rounded-lg p-2 text-center focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                                                    />
+                                                </label>
+                                            </div>
+
+                                            <label className="flex items-center justify-between cursor-pointer group hover:bg-slate-50 p-3 bg-white border border-slate-200 rounded-lg transition-colors">
+                                                <div className="flex flex-col">
+                                                    <span className="text-sm font-medium text-slate-700">投喂全部知识库内容</span>
+                                                    <span className="text-xs text-slate-400">将所有知识库文章发送给AI（适合文章较少时使用，能提升回答准确度）</span>
+                                                </div>
+                                                <div className="relative inline-flex items-center">
+                                                    <input
+                                                        type="checkbox"
+                                                        checked={settings.ai_qa_use_all_content === true || settings.ai_qa_use_all_content === 'true'}
+                                                        onChange={(e) => updateSetting('ai_qa_use_all_content', e.target.checked)}
+                                                        className="sr-only peer"
+                                                    />
+                                                    <div className="w-9 h-5 bg-slate-200 peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-purple-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-purple-600"></div>
+                                                </div>
+                                            </label>
+                                        </div>
+                                    )}
                                 </div>
 
                                 {/* Gemini Configuration */}
@@ -635,6 +689,37 @@ export default function AdminSettings() {
                                     />
                                 </div>
                             )}
+                        </div>
+                    </div>
+
+                    {/* Knowledge Base Settings */}
+                    <div className="border-t border-slate-100 pt-6"></div>
+                    <div className="flex items-center gap-3 mb-4">
+                        <div className="p-2 bg-emerald-100 rounded-lg">
+                            <Book className="w-5 h-5 text-emerald-600" />
+                        </div>
+                        <div>
+                            <h3 className="font-semibold text-slate-800">知识库配置</h3>
+                            <p className="text-sm text-slate-500">管理知识库功能的开关</p>
+                        </div>
+                    </div>
+
+                    <div className="p-5 bg-emerald-50/50 rounded-xl space-y-4 border border-emerald-100">
+                        <div className="flex items-center justify-between">
+                            <div className="flex items-center gap-3">
+                                <div>
+                                    <h3 className="font-semibold text-slate-800">启用知识库功能</h3>
+                                    <p className="text-sm text-slate-500">
+                                        关闭后，知识库将在所有端隐藏，AI 问答也将停止服务
+                                    </p>
+                                </div>
+                            </div>
+                            <button
+                                onClick={() => updateSetting('knowledge_base_enabled', settings.knowledge_base_enabled === false ? true : false)}
+                                className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${settings.knowledge_base_enabled !== false ? 'bg-emerald-500' : 'bg-slate-300'}`}
+                            >
+                                <span className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${settings.knowledge_base_enabled !== false ? 'translate-x-6' : 'translate-x-1'}`} />
+                            </button>
                         </div>
                     </div>
 

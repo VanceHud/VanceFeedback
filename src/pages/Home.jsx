@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import api from '../api';
-import { MessageSquare, CheckCircle, ArrowRight, Sparkles, Clock, AlertCircle, X, ChevronRight, Bell, Github } from 'lucide-react';
+import { MessageSquare, CheckCircle, ArrowRight, Sparkles, Clock, AlertCircle, X, ChevronRight, Bell, Github, Book } from 'lucide-react';
 import Loading from '../components/Loading';
 import Skeleton from '../components/Skeleton';
 import { formatDate, formatDateOnly } from '../utils/date';
@@ -331,6 +331,30 @@ export default function Home() {
                     {/* Decorative Circles */}
                     <div className="absolute -bottom-10 -right-10 w-40 h-40 rounded-full bg-white/10 animate-float" />
                     <div className="absolute -top-5 -left-5 w-20 h-20 rounded-full bg-white/10 animate-float" style={{ animationDelay: '1s' }} />
+                </div>
+
+                {/* Knowledge Base Quick Link */}
+                <div className="mb-10 animate-fade-in" style={{ animationDelay: '0.2s' }}>
+                    <Link
+                        to="/knowledge-base"
+                        className="group block bg-gradient-to-r from-emerald-50 via-teal-50 to-cyan-50 rounded-2xl p-6 border border-emerald-200 hover:border-emerald-300 shadow-sm hover:shadow-lg transition-all"
+                    >
+                        <div className="flex items-center justify-between">
+                            <div className="flex items-center gap-4">
+                                <div className="p-3 bg-gradient-to-br from-emerald-500 to-teal-500 rounded-xl text-white shadow-lg">
+                                    <Book className="w-6 h-6" />
+                                </div>
+                                <div>
+                                    <h3 className="text-lg font-bold text-slate-800 group-hover:text-emerald-600 transition-colors">📚 知识库</h3>
+                                    <p className="text-sm text-slate-500">常见问题解答 · FAQ · 帮助中心</p>
+                                </div>
+                            </div>
+                            <div className="flex items-center gap-2 text-emerald-600 font-medium">
+                                <span className="hidden sm:inline">浏览全部</span>
+                                <ChevronRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+                            </div>
+                        </div>
+                    </Link>
                 </div>
 
                 {/* Announcements Section */}
