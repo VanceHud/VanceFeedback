@@ -1,6 +1,7 @@
 # VanceFeedback
 
 [![GitHub](https://img.shields.io/badge/GitHub-vancehuds%2FVanceFeedback-blue?logo=github)](https://github.com/vancehuds/VanceFeedback)
+[![Docker](https://img.shields.io/badge/Docker-vancehud%2Fvancefeedback-blue?logo=docker&logoColor=white)](https://hub.docker.com/r/vancehud/vancefeedback)
 [![License](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
 
 VanceFeedback is a modern, intelligent feedback and ticket management system. Built with a client-server architecture using React for the frontend and Express for the backend, it integrates **Google Gemini AI** or **ZhiPu BigModel** powered automation to enhance the efficiency of user feedback collection, tracking, and management.
@@ -93,7 +94,12 @@ VanceFeedback is a modern, intelligent feedback and ticket management system. Bu
 VanceFeedback supports flexible deployment options suitable for various production environments.
 
 ### 1. Docker Deployment (Recommended)
-Launch the full environment with a single command:
+You can directly use the official image from Docker Hub:
+```bash
+docker run -d -p 3000:3000 --name vancefeedback vancehud/vancefeedback:latest
+```
+
+Or launch the full environment from source:
 ```bash
 docker-compose -f docker-compose.separated.yml up -d --build
 ```

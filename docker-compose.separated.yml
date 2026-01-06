@@ -24,8 +24,16 @@ services:
       # - DB_NAME=vancefeedback
 
       # Auto-Installer Configuration (Only runs on fresh start)
-      # - ADMIN_USER=admin
-      # - ADMIN_PASS=your_secure_password
+      - ADMIN_USER=${ADMIN_USER:-admin}
+      - ADMIN_PASS=${ADMIN_PASS:-admin123}
+
+      # Security
+      - JWT_SECRET=${JWT_SECRET}
+
+      # AI Configuration
+      - GEMINI_API_KEY=${GEMINI_API_KEY}
+      - BIGMODEL_API_KEY=${BIGMODEL_API_KEY}
+      - AI_PROVIDER=${AI_PROVIDER}
     volumes:
       # Persist SQLite data (if using SQLite)
       - ./server/data:/app/server/data

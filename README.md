@@ -1,6 +1,7 @@
 # VanceFeedback
 
 [![GitHub](https://img.shields.io/badge/GitHub-vancehuds%2FVanceFeedback-blue?logo=github)](https://github.com/vancehuds/VanceFeedback)
+[![Docker](https://img.shields.io/badge/Docker-vancehud%2Fvancefeedback-blue?logo=docker&logoColor=white)](https://hub.docker.com/r/vancehud/vancefeedback)
 [![License](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
 
 VanceFeedback 是一个现代化的智能反馈和工单管理系统。它采用客户端-服务器架构，前端基于 React，后端基于 Express，集成了 **Google Gemini AI** 或**ZhiPu BigModel** 驱动的自动化功能，旨在提升用户反馈收集、跟踪和管理的效率。
@@ -93,7 +94,12 @@ VanceFeedback 是一个现代化的智能反馈和工单管理系统。它采用
 VanceFeedback 提供了灵活的部署方案，适配多种生产环境。
 
 ### 1. Docker 部署（推荐）
-支持一键启动完整环境：
+你可以直接使用 Docker Hub 上的官方镜像：
+```bash
+docker run -d -p 3000:3000 --name vancefeedback vancehud/vancefeedback:latest
+```
+
+或者使用源码编译启动完整环境：
 ```bash
 docker-compose -f docker-compose.separated.yml up -d --build
 ```
