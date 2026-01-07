@@ -31,6 +31,9 @@ import MobileAdminSettings from './pages/mobile/admin/MobileAdminSettings';
 import MobileAdminAnnouncements from './pages/mobile/admin/MobileAdminAnnouncements';
 import MobileAdminAudit from './pages/mobile/admin/MobileAdminAudit';
 import MobileAdminQuestionTypes from './pages/mobile/admin/MobileAdminQuestionTypes';
+import MobileAdminKnowledgeBase from './pages/mobile/admin/MobileAdminKnowledgeBase';
+import MobileKnowledgeBase from './pages/mobile/MobileKnowledgeBase';
+import MobileKnowledgeBaseArticle from './pages/mobile/MobileKnowledgeBaseArticle';
 import { shouldRedirectToMobile } from './utils/isMobile';
 
 // Desktop Admin Panel Imports
@@ -45,7 +48,10 @@ import AdminSettings from './pages/admin/AdminSettings';
 import AdminQuestionTypes from './pages/admin/AdminQuestionTypes';
 import AdminEmailTemplates from './pages/admin/AdminEmailTemplates';
 import AdminAnnouncements from './pages/admin/AdminAnnouncements';
+import AdminKnowledgeBase from './pages/admin/AdminKnowledgeBase';
 import HumanVerification from './pages/HumanVerification';
+import KnowledgeBase from './pages/KnowledgeBase';
+import KnowledgeBaseArticle from './pages/KnowledgeBaseArticle';
 
 function AppGuard({ children }) {
     const [status, setStatus] = useState('loading'); // loading, configured, setup
@@ -226,9 +232,13 @@ export default function App() {
                                 <Route path="/login" element={<Login />} />
                                 <Route path="/dashboard/*" element={<Dashboard />} />
                                 <Route path="/user-center" element={<UserCenter />} />
+                                <Route path="/knowledge-base" element={<KnowledgeBase />} />
+                                <Route path="/knowledge-base/:slug" element={<KnowledgeBaseArticle />} />
                                 {/* Mobile Routes */}
                                 <Route path="/m" element={<MobileLayout />}>
                                     <Route index element={<MobileHome />} />
+                                    <Route path="knowledge-base" element={<MobileKnowledgeBase />} />
+                                    <Route path="knowledge-base/:slug" element={<MobileKnowledgeBaseArticle />} />
                                     <Route path="feedback" element={<MobileFeedback />} />
                                     <Route path="profile" element={<MobileProfile />} />
                                     <Route path="edit-profile" element={<MobileEditProfile />} />
@@ -249,6 +259,7 @@ export default function App() {
                                     <Route path="question-types" element={<AdminQuestionTypes />} />
                                     <Route path="email-templates" element={<AdminEmailTemplates />} />
                                     <Route path="announcements" element={<AdminAnnouncements />} />
+                                    <Route path="knowledge-base" element={<AdminKnowledgeBase />} />
                                 </Route>
                                 {/* Mobile Admin Routes */}
                                 <Route path="/m/admin" element={<MobileAdminLayout />}>
@@ -261,6 +272,7 @@ export default function App() {
                                     <Route path="announcements" element={<MobileAdminAnnouncements />} />
                                     <Route path="audit" element={<MobileAdminAudit />} />
                                     <Route path="question-types" element={<MobileAdminQuestionTypes />} />
+                                    <Route path="knowledge-base" element={<MobileAdminKnowledgeBase />} />
                                 </Route>
                                 <Route path="*" element={<NotFound />} />
                                 <Route path="/verify-human" element={<HumanVerification />} />
